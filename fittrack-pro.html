@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#00c896">
+<title>FitTrack Pro</title>
+<style>
+:root{--g:#00c896;--b:#3b82f6;--o:#f59e0b;--r:#ef4444;--p:#8b5cf6;--c:#06b6d4;--bg:#060a10;--card:#0d1520;--bd:#1e2d42;--tx:#e2e8f0;--mu:#56637a;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,'Segoe UI',sans-serif;font-size:14px;max-width:480px;margin:0 auto;min-height:100vh;padding-bottom:74px;}
+input,select,button,textarea{font-family:inherit;font-size:14px;}
+#nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#08090f;border-top:1px solid var(--bd);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);}
+.nb{flex:1;padding:8px 2px 6px;background:transparent;border:none;color:var(--mu);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;font-weight:700;text-transform:uppercase;}
+.nb.active{color:var(--g);}
+.ni{font-size:20px;line-height:1.2;}
+#hdr{background:linear-gradient(135deg,#0d1f1a,#08090f);padding:12px 16px 10px;border-bottom:1px solid #0e1b2a;position:sticky;top:0;z-index:50;}
+.ht{font-size:17px;font-weight:800;color:var(--g);letter-spacing:1px;}
+.hs{font-size:11px;color:#3d5268;margin-top:1px;}
+.pg{display:none;padding:12px;}
+.pg.active{display:block;}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:10px;}
+.ct{font-size:10px;color:#5b7a9e;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:10px;}
+.kpi2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.kpi4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;}
+.kb{background:var(--bg);border-radius:10px;padding:10px;text-align:center;border:1px solid var(--bd);}
+.kv{font-size:20px;font-weight:800;line-height:1;}
+.kl{font-size:9px;color:var(--mu);margin-top:3px;}
+.inp{background:var(--bg);border:1px solid var(--bd);color:var(--tx);border-radius:8px;padding:9px 11px;width:100%;}
+.inp:focus{outline:none;border-color:#00c89666;}
+.lbl{display:block;font-size:10px;color:#5b7a9e;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;font-weight:700;}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;}
+.mb10{margin-bottom:10px;}
+.btn{width:100%;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;}
+.btn-p{background:linear-gradient(90deg,var(--g),#0066cc);color:#fff;}
+.btn-s{background:#0d1f2e;border:1px solid #00c89644;color:var(--g);}
+.btn-o{background:#2d1a00;border:1px solid #f59e0b44;color:var(--o);}
+.btn-r{background:#2d0a0a;border:1px solid #ef444444;color:var(--r);}
+.tag{border-radius:20px;padding:3px 9px;font-size:10px;font-weight:700;display:inline-block;}
+.tg{background:#0a1f18;border:1px solid #00c89644;color:var(--g);}
+.to{background:#2d1a00;border:1px solid #f59e0b44;color:var(--o);}
+.tb{background:#0a1530;border:1px solid #3b82f644;color:var(--b);}
+.tr{background:#2d0a0a;border:1px solid #ef444444;color:var(--r);}
+.tp{background:#1a0a30;border:1px solid #8b5cf644;color:var(--p);}
+.pt{background:var(--bg);border-radius:20px;height:8px;overflow:hidden;}
+.pf{height:100%;border-radius:20px;transition:width .5s;}
+.wg{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:10px;}
+.dp{border-radius:8px;padding:6px 2px;text-align:center;cursor:pointer;border:1px solid var(--bd);}
+.dp.muscu{border-color:var(--g);background:#0a1f18;}
+.dp.cardio{border-color:var(--r);background:#2d0a0a;}
+.dp.renfo{border-color:var(--p);background:#1a0a30;}
+.dp.repos{opacity:.4;}
+.dj{font-size:9px;color:var(--mu);font-weight:700;}
+.di{font-size:13px;margin-top:1px;}
+.cb{width:28px;height:28px;border-radius:8px;border:2px solid var(--bd);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.cb.done{border-color:var(--g);background:var(--g);color:#fff;}
+.alert-g{background:#0a1f18;border:1px solid #00c89633;border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:12px;line-height:1.6;color:var(--g);}
+.alert-o{background:#2d1a00;border:1px solid #f59e0b33;border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:12px;line-height:1.6;color:var(--o);}
+.alert-b{background:#0a1530;border:1px solid #3b82f633;border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:12px;line-height:1.6;color:var(--b);}
+.macro-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;}
+.mo{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000000cc;z-index:200;align-items:flex-end;justify-content:center;}
+.mo.open{display:flex;}
+.mb2{background:var(--card);border:1px solid var(--bd);border-radius:18px 18px 0 0;padding:20px;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;padding-bottom:calc(20px + env(safe-area-inset-bottom));}
+#timer-ov{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000000ee;z-index:300;align-items:center;justify-content:center;}
+#timer-ov.open{display:flex;}
+.t-circle{width:180px;height:180px;border-radius:50%;border:6px solid var(--bd);display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative;background:var(--card);}
+.t-svg{position:absolute;top:0;left:0;transform:rotate(-90deg);}
+.t-num{font-size:48px;font-weight:800;color:var(--g);font-variant-numeric:tabular-nums;}
+#toast{display:none;position:fixed;top:68px;left:50%;transform:translateX(-50%);background:var(--card);border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;z-index:999;white-space:nowrap;}
+.food-chip{display:inline-flex;align-items:center;gap:5px;background:#0a1f18;border:1px solid #00c89633;border-radius:20px;padding:4px 10px;margin:3px;font-size:11px;cursor:pointer;}
+.food-chip.selected{background:#00c89622;border-color:var(--g);color:var(--g);}
+.meal-card{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:12px;margin-bottom:8px;cursor:pointer;}
+.meal-card:active{border-color:var(--g);}
+.meal-title{font-size:14px;font-weight:700;color:var(--tx);margin-bottom:4px;}
+.meal-meta{font-size:11px;color:var(--mu);}
+.meal-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;}
+.obj-bar{background:linear-gradient(135deg,#0a1f18,#0d1520);border:1px solid #00c89633;border-radius:14px;padding:14px;margin-bottom:10px;}
+.seance-chip{padding:6px 12px;border-radius:20px;border:1px solid var(--bd);background:transparent;color:var(--mu);cursor:pointer;font-size:11px;font-weight:700;font-family:inherit;}
+.seance-chip.active{border-color:var(--g);background:#0a1f18;color:var(--g);}
+</style>
+</head>
+<body>
+<div id="hdr">
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <svg width="40" height="40" viewBox="0 0 40 40" style="flex-shrink:0;">
+        <rect width="40" height="40" rx="11" fill="url(#hg)"/>
+        <defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00c896"/><stop offset="100%" stop-color="#0066cc"/></linearGradient></defs>
+        <rect x="4" y="18" width="7" height="4" rx="2" fill="#fff" opacity=".9"/>
+        <rect x="4" y="14" width="4" height="12" rx="2" fill="#fff" opacity=".8"/>
+        <rect x="11" y="19" width="18" height="2" rx="1" fill="#fff"/>
+        <rect x="29" y="18" width="7" height="4" rx="2" fill="#fff" opacity=".9"/>
+        <rect x="32" y="14" width="4" height="12" rx="2" fill="#fff" opacity=".8"/>
+        <polyline points="13,12 15,9 17,13 19,7 21,13 23,10 27,12" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+      </svg>
+      <div><div class="ht">FitTrack Pro</div><div class="hs" id="hs">Chargement...</div></div>
+    </div>
+    <div id="hdr-obj" style="font-size:10px;font-weight:700;color:var(--o);text-align:right;"></div>
+  </div>
+</div>
+
+<div id="page-dashboard" class="pg active"></div>
+<div id="page-programme" class="pg"></div>
+<div id="page-seance" class="pg"></div>
+<div id="page-nutrition" class="pg"></div>
+<div id="page-stats" class="pg"></div>
+
+<nav id="nav">
+  <button class="nb active" data-page="dashboard"><span class="ni">&#128200;</span>Accueil</button>
+  <button class="nb" data-page="programme"><span class="ni">&#128197;</span>Plan</button>
+  <button class="nb" data-page="seance"><span class="ni">&#127947;</span>Seance</button>
+  <button class="nb" data-page="nutrition"><span class="ni">&#129367;</span>Nutrition</button>
+  <button class="nb" data-page="stats"><span class="ni">&#128202;</span>Stats</button>
+</nav>
+
+<div id="timer-ov">
+  <div style="text-align:center;padding:20px;">
+    <div style="font-size:13px;color:var(--mu);margin-bottom:12px;" id="t-name"></div>
+    <div class="t-circle">
+      <svg class="t-svg" width="180" height="180">
+        <circle cx="90" cy="90" r="82" fill="none" stroke="#1e2d42" stroke-width="6"/>
+        <circle cx="90" cy="90" r="82" fill="none" stroke="var(--g)" stroke-width="6" stroke-dasharray="515" stroke-dashoffset="0" id="t-arc" stroke-linecap="round"/>
+      </svg>
+      <div class="t-num" id="t-num">00</div>
+      <div style="font-size:11px;color:var(--mu);" id="t-lbl">sec</div>
+    </div>
+    <div style="margin-top:18px;display:flex;gap:10px;justify-content:center;">
+      <button class="btn btn-s" style="width:110px;" id="t-pause-btn" onclick="pauseTimer()">Pause</button>
+      <button class="btn btn-r" style="width:110px;" onclick="stopTimer()">Arreter</button>
+    </div>
+  </div>
+</div>
+
+<div id="mo-exo" class="mo" onclick="closeMo('mo-exo')">
+  <div class="mb2" onclick="event.stopPropagation()">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div style="font-size:16px;font-weight:800;" id="mo-title"></div>
+      <button onclick="closeMo('mo-exo')" style="background:var(--bd);border:none;color:var(--tx);border-radius:50%;width:30px;height:30px;cursor:pointer;">x</button>
+    </div>
+    <div id="mo-content"></div>
+  </div>
+</div>
+
+<div id="mo-meal" class="mo" onclick="closeMo('mo-meal')">
+  <div class="mb2" onclick="event.stopPropagation()">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div style="font-size:16px;font-weight:800;" id="mo-meal-title">Recette</div>
+      <button onclick="closeMo('mo-meal')" style="background:var(--bd);border:none;color:var(--tx);border-radius:50%;width:30px;height:30px;cursor:pointer;">x</button>
+    </div>
+    <div id="mo-meal-content"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ============================================================
+// PROGRAMME COMPLET
+// ============================================================
+var PROGRAMME = [
+  // LUNDI - Muscu + HIIT finisher
+  {jour:"Lundi", type:"muscu", nom:"Poitrine + Triceps + Abdos + HIIT", icone:"&#128170;", couleur:"#00c896", focus:"Pompes variees + finisher cardio",
+   exercices:[
+    {nom:"Pompes classiques",series:5,reps:"Max (vise 20+)",muscle:"Pectoraux / Triceps",statique:false,poids_corps:true,
+     notes:"Corps droit, coudes 45 deg. 5 series max. Si facile : pieds sur chaise.",
+     alts:[{nom:"Pompes sur genoux",why:"Version plus facile"}]},
+    {nom:"Pompes larges",series:4,reps:"15",muscle:"Pectoraux externes",statique:false,poids_corps:true,
+     notes:"Mains larges. Cible les pectoraux exterieurs pour un torse large.",alts:[]},
+    {nom:"Pompes serrees triceps",series:4,reps:"12-15",muscle:"Triceps",statique:false,poids_corps:true,
+     notes:"Mains tres proches. Coudes le long du corps.",alts:[]},
+    {nom:"Pompes inclines pieds hauts",series:3,reps:"10-12",muscle:"Pectoraux hauts",statique:false,poids_corps:true,
+     notes:"Pieds sur chaise. Cible le haut des pectoraux.",alts:[]},
+    {nom:"Pompes declines mains hautes",series:3,reps:"12-15",muscle:"Pectoraux bas",statique:false,poids_corps:true,
+     notes:"Mains sur chaise. Cible le bas des pectoraux.",alts:[]},
+    {nom:"Gainage planche 60 sec",series:4,reps:"60 sec",muscle:"Abdos profonds transverse",statique:true,poids_corps:true,
+     notes:"LE meilleur pour le ventre plat. Contracte le ventre vers l'interieur.",alts:[]},
+    {nom:"Crunch bicycle lent",series:4,reps:"25",muscle:"Abdos obliques",statique:false,poids_corps:true,
+     notes:"TRES LENT. 2 sec dans chaque sens. Lent = efficace.",alts:[]},
+    {nom:"Relevee de jambes",series:3,reps:"20",muscle:"Abdos bas",statique:false,poids_corps:true,
+     notes:"Jambes tendues. Monte et descends lentement. Dos colle au sol.",alts:[]},
+    {nom:"HIIT finisher tapis : 30s sprint / 30s marche",series:6,reps:"6 cycles = 6 min",muscle:"Cardio afterburn",statique:false,poids_corps:false,
+     notes:"FINISHER apres la muscu = double effet brule-graisse ! Sprint a fond 30 sec, marche 30 sec. 6 cycles suffisent en fin de seance pour declencher l'afterburn toute la nuit.",
+     alts:[{nom:"HIIT poids du corps : burpees 30s / repos 30s",why:"Sans tapis"}]},
+    {nom:"Gainage lateral",series:3,reps:"45 sec/cote",muscle:"Obliques flancs",statique:true,poids_corps:true,
+     notes:"Corps en ligne. Affine les flancs.",alts:[]},
+  ]},
+  // MARDI - SALLE Dos + Biceps + Abdos
+  {jour:"Mardi", type:"muscu", nom:"SALLE : Dos + Biceps + Abdos", icone:"&#127947;", couleur:"#3b82f6", focus:"Salle de muscu",
+   exercices:[
+    {nom:"Tirage poulie haute",series:4,reps:"10-12",muscle:"Grand dorsal",statique:false,poids_corps:false,
+     notes:"Prise large. Tire vers le menton. V-shape.",alts:[]},
+    {nom:"Rowing barre ou machine",series:4,reps:"10-12",muscle:"Dos moyen rhomboides",statique:false,poids_corps:false,
+     notes:"Tire vers le nombril. Serre les omoplates.",alts:[]},
+    {nom:"Tirage horizontal cable",series:3,reps:"12-15",muscle:"Dos moyen trapeze",statique:false,poids_corps:false,
+     notes:"Assis. Dos droit. Soulage les contractures.",alts:[]},
+    {nom:"Face pull cable",series:3,reps:"20",muscle:"Deltoide post / coiffe",statique:false,poids_corps:false,
+     notes:"Leger. CLE pour l'epaule instable.",alts:[]},
+    {nom:"Curl biceps barre ou halteres",series:4,reps:"12-15",muscle:"Biceps",statique:false,poids_corps:false,
+     notes:"Coudes fixes. Amplitude complete.",alts:[]},
+    {nom:"Crunch machine ou sol",series:4,reps:"20-25",muscle:"Abdos grand droit",statique:false,poids_corps:false,
+     notes:"Lent et controle. 3 sec descente.",alts:[]},
+    {nom:"Gainage planche 60 sec",series:3,reps:"60 sec",muscle:"Abdos profonds",statique:true,poids_corps:true,
+     notes:"Ventre aspire vers l'interieur.",alts:[]},
+  ]},
+  // MERCREDI - HIIT INTENSIF 30 min
+  {jour:"Mercredi", type:"cardio", nom:"HIIT Intensif 30 min", icone:"&#128293;", couleur:"#ef4444", focus:"Max afterburn - remplace 8km",
+   exercices:[
+    {nom:"Echauffement tapis 5 min",series:1,reps:"5 min",muscle:"Cardio",statique:false,poids_corps:false,
+     notes:"Allure legere. Monte progressivement a 60% FC max.",alts:[]},
+    {nom:"HIIT bloc 1 : 30s sprint / 30s marche",series:8,reps:"8 cycles = 8 min",muscle:"VO2max lipides",statique:false,poids_corps:false,
+     notes:"Sprint tapis a 85% FC max (165-175 bpm). Marche active entre. Ce protocole brule 2x plus de graisses qu'un 8km a allure constante grace a l'effet afterburn 24-48h.",
+     alts:[{nom:"Velo HIIT resistance elevee",why:"Alternative velo"}]},
+    {nom:"Recup active 3 min velo",series:1,reps:"3 min",muscle:"Transition",statique:false,poids_corps:false,
+     notes:"Velo resistance faible. Laisse la FC redescendre a 120 bpm.",alts:[]},
+    {nom:"HIIT bloc 2 : 40s sprint / 20s marche",series:6,reps:"6 cycles = 6 min",muscle:"Cardio intensif",statique:false,poids_corps:false,
+     notes:"Plus dur car les intervalles sont plus longs. Maintiens la forme. 80% FC max.",alts:[]},
+    {nom:"Recup 2 min",series:1,reps:"2 min",muscle:"Transition",statique:false,poids_corps:false,
+     notes:"Marche lente. Respire.",alts:[]},
+    {nom:"Finisher velo : 5 min resistance max",series:1,reps:"5 min",muscle:"Tout donner",statique:false,poids_corps:false,
+     notes:"Resistance maximale sur le velo. Pedale aussi vite que possible. Declenche la liberation d'hormone de croissance = bruler les graisses cette nuit.",alts:[]},
+    {nom:"Retour au calme + etirements",series:1,reps:"5 min",muscle:"Recuperation",statique:true,poids_corps:true,
+     notes:"Tapis allure tres lente. FC sous 100 bpm. Etirements mollets et ischios.",alts:[]},
+  ]},
+  // JEUDI - SALLE Epaules + Triceps + Abdos
+  {jour:"Jeudi", type:"muscu", nom:"SALLE : Epaules + Triceps + Abdos", icone:"&#9889;", couleur:"#8b5cf6", focus:"Salle de muscu",
+   exercices:[
+    {nom:"Elevation laterale cable bas",series:4,reps:"15-20",muscle:"Deltoide lateral",statique:false,poids_corps:false,
+     notes:"JAMAIS au-dessus de la tete. Hauteur epaules seulement.",alts:[]},
+    {nom:"Oiseau rear delt machine",series:3,reps:"15-20",muscle:"Deltoide posterieur",statique:false,poids_corps:false,
+     notes:"CLE stabilite epaule instable.",alts:[]},
+    {nom:"Poulie triceps haute",series:4,reps:"15",muscle:"Triceps",statique:false,poids_corps:false,
+     notes:"Coudes fixes. Pousse vers le bas.",alts:[]},
+    {nom:"Dips machine",series:3,reps:"12",muscle:"Triceps pectoraux",statique:false,poids_corps:false,
+     notes:"Machine assistee si disponible.",alts:[{nom:"Dips chaise",why:"Sans machine"}]},
+    {nom:"Superman extension dos",series:3,reps:"15",muscle:"Lombaires dos moyen",statique:false,poids_corps:true,
+     notes:"Au sol. Leve bras et jambes. Tiens 2 sec. Contre les contractures.",alts:[]},
+    {nom:"Circuit abdos 5 min non-stop",series:1,reps:"5 min",muscle:"Abdos complet",statique:false,poids_corps:true,
+     notes:"Enchaine sans pause : 20 crunches + 20 relevees jambes + 30 sec planche + 20 bicycle. Recommence. BRULANT pour le ventre !",alts:[]},
+  ]},
+  // VENDREDI - Fessiers + Jambes + Abdos + TEMPO
+  {jour:"Vendredi", type:"muscu", nom:"Fessiers + Jambes + Abdos + Tempo", icone:"&#127947;", couleur:"#06b6d4", focus:"Jambes douces + finisher tempo",
+   exercices:[
+    {nom:"Pont fessier",series:4,reps:"25 + 10 sec tenu",muscle:"Fessiers lombaires",statique:false,poids_corps:true,
+     notes:"Haltere sur le bassin pour progresser.",alts:[]},
+    {nom:"Pont fessier unilateral",series:3,reps:"15/jambe",muscle:"Fessiers ischios",statique:false,poids_corps:true,
+     notes:"Une jambe levee. Equilibre les deux cotes.",alts:[]},
+    {nom:"Souleve de terre roumain halteres",series:4,reps:"12-15",muscle:"Ischios fessiers dos",statique:false,poids_corps:false,
+     notes:"Jambes quasi tendues. DOS DROIT.",alts:[]},
+    {nom:"Mollets debout halteres",series:4,reps:"25",muscle:"Mollets",statique:false,poids_corps:false,
+     notes:"Monte sur la pointe. Tiens 1 sec en haut.",alts:[]},
+    {nom:"Dead bug",series:3,reps:"10/cote",muscle:"Transverse abdos profonds",statique:false,poids_corps:true,
+     notes:"Dos COLLE. Descends bras + jambe opposes. Le meilleur pour le ventre plat.",alts:[]},
+    {nom:"Russian twist lent",series:3,reps:"25",muscle:"Obliques",statique:false,poids_corps:true,
+     notes:"LENT. Affine les flancs.",alts:[]},
+    {nom:"Gainage planche",series:3,reps:"60 sec",muscle:"Abdos",statique:true,poids_corps:true,
+     notes:"Ventre aspire. Corps droit.",alts:[]},
+    {nom:"Tempo tapis 20 min : 75-85% FCmax",series:1,reps:"20 min",muscle:"Cardio lipides seuil",statique:false,poids_corps:false,
+     notes:"FINISHER apres la muscu jambes. FC 140-155 bpm. Allure soutenue mais tenue. Plus efficace qu'un 8km car ameliore le seuil lactique = ton corps brule plus de graisses meme au repos. 20 min suffisent en fin de seance.",
+     alts:[{nom:"Velo resistance moyenne 20 min",why:"Si jambes trop fatiguees pour courir"}]},
+  ]},
+  // SAMEDI - Zone 2 LONG
+  {jour:"Samedi", type:"cardio", nom:"Zone 2 Long : 50 min", icone:"&#127939;", couleur:"#3b82f6", focus:"Bruler les graisses en profondeur",
+   exercices:[
+    {nom:"Echauffement 5 min",series:1,reps:"5 min zone 1",muscle:"Cardio",statique:false,poids_corps:false,
+     notes:"Progressif. Ne pas demarrer a fond.",alts:[]},
+    {nom:"Zone 2 tapis ou velo 40 min",series:1,reps:"40 min",muscle:"Lipides 60-70% FCmax",statique:false,poids_corps:false,
+     notes:"FC 110-130 bpm. Tu parles difficilement. MEILLEURE zone pour brulage lipides direct. Alterne 20 min tapis + 20 min velo pour varier les sollicitations et eviter la monotonie.",
+     alts:[{nom:"40 min velo uniquement",why:"Si genou douloureux"},{nom:"40 min tapis uniquement",why:"Preference course"}]},
+    {nom:"Retour calme + etirements 10 min",series:1,reps:"10 min",muscle:"Recuperation",statique:true,poids_corps:true,
+     notes:"5 min recup + 5 min etirements complets. Important pour la recuperation.",alts:[]},
+  ]},
+  // DIMANCHE - Repos actif
+  {jour:"Dimanche", type:"repos", nom:"Repos actif + Abdos maintenance", icone:"&#128564;", couleur:"#56637a", focus:"Recuperation active",
+   exercices:[
+    {nom:"Marche 30 min",series:1,reps:"30 min",muscle:"Cardio leger zone 1",statique:false,poids_corps:true,
+     notes:"Pas d'intensite. Recuperation active. Brule quand meme 150-200 kcal.",alts:[]},
+    {nom:"Gainage planche",series:3,reps:"45 sec",muscle:"Abdos maintenance",statique:true,poids_corps:true,
+     notes:"Meme les jours de repos ! 3x45 sec = 3 min. Maintient le travail abdo.",alts:[]},
+    {nom:"Etirements globaux 20 min",series:1,reps:"20 min",muscle:"Souplesse mobilite",statique:true,poids_corps:true,
+     notes:"Epaule, genoux, dos, cervicales. 30-60 sec par position. Jamais de douleur.",alts:[]},
+  ]},
+];
+
+
+// ============================================================
+// BASE ALIMENTS
+// ============================================================
+var ALIMENTS_BASE = {
+  proteines:[
+    {nom:"Poulet (150g)",kcal:165,p:31,g:0,l:3,categorie:"Viande"},
+    {nom:"Oeuf entier",kcal:78,p:6,g:0,l:5,categorie:"Oeuf"},
+    {nom:"Blanc oeuf x3",kcal:51,p:11,g:0,l:0,categorie:"Oeuf"},
+    {nom:"Saumon (150g)",kcal:280,p:30,g:0,l:17,categorie:"Poisson"},
+    {nom:"Thon en boite",kcal:120,p:26,g:0,l:1,categorie:"Poisson"},
+    {nom:"Fromage blanc 0%",kcal:60,p:10,g:4,l:0,categorie:"Laitier"},
+    {nom:"Yaourt grec nature",kcal:100,p:10,g:4,l:5,categorie:"Laitier"},
+    {nom:"Steak haché 5%",kcal:150,p:22,g:0,l:7,categorie:"Viande"},
+    {nom:"Crevettes (150g)",kcal:120,p:25,g:0,l:2,categorie:"Poisson"},
+    {nom:"Tofu (100g)",kcal:80,p:8,g:2,l:4,categorie:"Vegetal"},
+  ],
+  glucides:[
+    {nom:"Riz complet (80g cru)",kcal:280,p:6,g:60,l:2,categorie:"Cereale"},
+    {nom:"Flocons avoine (60g)",kcal:220,p:8,g:38,l:4,categorie:"Cereale"},
+    {nom:"Patate douce (150g)",kcal:130,p:2,g:30,l:0,categorie:"Legume"},
+    {nom:"Pain complet (2 tranches)",kcal:160,p:6,g:30,l:2,categorie:"Pain"},
+    {nom:"Quinoa (80g cru)",kcal:290,p:11,g:52,l:4,categorie:"Cereale"},
+    {nom:"Banane",kcal:90,p:1,g:23,l:0,categorie:"Fruit"},
+    {nom:"Pomme",kcal:70,p:0,g:18,l:0,categorie:"Fruit"},
+  ],
+  legumes:[
+    {nom:"Brocoli (200g)",kcal:70,p:6,g:10,l:0,categorie:"Legume"},
+    {nom:"Epinards (100g)",kcal:25,p:3,g:2,l:0,categorie:"Legume"},
+    {nom:"Courgette (200g)",kcal:34,p:2,g:5,l:0,categorie:"Legume"},
+    {nom:"Tomate (200g)",kcal:36,p:2,g:7,l:0,categorie:"Legume"},
+    {nom:"Concombre (200g)",kcal:30,p:1,g:5,l:0,categorie:"Legume"},
+    {nom:"Salade verte (100g)",kcal:15,p:1,g:2,l:0,categorie:"Legume"},
+    {nom:"Haricots verts (200g)",kcal:60,p:4,g:10,l:0,categorie:"Legume"},
+    {nom:"Avocat (1/2)",kcal:120,p:1,g:2,l:12,categorie:"Legume gras"},
+    {nom:"Champignons (150g)",kcal:30,p:4,g:3,l:0,categorie:"Legume"},
+  ],
+  lipides:[
+    {nom:"Huile olive (1 cs)",kcal:90,p:0,g:0,l:10,categorie:"Huile"},
+    {nom:"Amandes (30g)",kcal:175,p:6,g:5,l:15,categorie:"Oleagineux"},
+    {nom:"Noix (30g)",kcal:200,p:4,g:4,l:19,categorie:"Oleagineux"},
+  ],
+  boissons:[
+    {nom:"Eau (500ml)",kcal:0,p:0,g:0,l:0,categorie:"Boisson"},
+    {nom:"Cafe noir",kcal:2,p:0,g:0,l:0,categorie:"Boisson"},
+    {nom:"The vert",kcal:2,p:0,g:0,l:0,categorie:"Boisson"},
+    {nom:"Eau citron gingembre",kcal:5,p:0,g:1,l:0,categorie:"Boisson"},
+    {nom:"Eau citron menthe",kcal:5,p:0,g:1,l:0,categorie:"Boisson"},
+    {nom:"Smoothie vert (epinards+pomme)",kcal:80,p:2,g:18,l:0,categorie:"Boisson"},
+    {nom:"Shake proteine (1 dose)",kcal:120,p:24,g:4,l:2,categorie:"Supplement"},
+    {nom:"Kefir (200ml)",kcal:80,p:6,g:8,l:2,categorie:"Boisson"},
+  ]
+};
+
+// ============================================================
+// REPAS TYPES (generateur intelligent)
+// ============================================================
+var REPAS_DB = [
+  // PETIT DEJEUNER
+  {id:"pd1",moment:"Petit-dejeuner",nom:"Bowl proteine matin",temps:5,kcal:380,p:30,g:40,l:8,
+   tags:["ventre plat","rapide","anti-inflammatoire"],
+   ingredients:["Flocons avoine (60g)","Fromage blanc 0%","Banane","Amandes (30g)"],
+   recette:"Melange les flocons d'avoine avec le fromage blanc. Ajoute la banane en rondelles et les amandes. Optionnel : une cuiller de miel.",
+   pourquoi:"Les flocons d'avoine stabilisent la glycemie = moins de fringales. Proteines pour maintenir le muscle."},
+  {id:"pd2",moment:"Petit-dejeuner",nom:"Oeufs brouilles rapides",temps:8,kcal:320,p:28,g:15,l:14,
+   tags:["ventre plat","rapide","muscle"],
+   ingredients:["Oeuf entier","Blanc oeuf x3","Pain complet (2 tranches)","The vert"],
+   recette:"Bats les oeufs + blancs. Cuisson a feu doux 2-3 min en remuant. Sur le pain complet. The vert sans sucre.",
+   pourquoi:"Proteines completes le matin = coupe-faim jusqu'au midi. The vert accelere le metabolisme."},
+  {id:"pd3",moment:"Petit-dejeuner",nom:"Smoothie bruleur",temps:3,kcal:260,p:15,g:42,l:4,
+   tags:["detox","ventre plat","rapide"],
+   ingredients:["Smoothie vert (epinards+pomme)","Fromage blanc 0%","Flocons avoine (60g)"],
+   recette:"Mixe epinards + pomme + eau. Ajoute le fromage blanc et les flocons. Consomme immediatement.",
+   pourquoi:"Epinards = anti-gonflement. Pomme = fibres coupe-faim. Ultra rapide."},
+  // DEJEUNER
+  {id:"dj1",moment:"Dejeuner",nom:"Bowl poulet riz complet",temps:15,kcal:480,p:42,g:52,l:8,
+   tags:["muscle","energie","equilibre"],
+   ingredients:["Poulet (150g)","Riz complet (80g cru)","Brocoli (200g)","Huile olive (1 cs)"],
+   recette:"Cuis le riz. Grill le poulet a la poele 6-7 min. Cuis le brocoli vapeur 5 min. Assemble et arrose d'huile d'olive.",
+   pourquoi:"Le repas ideal post-muscu. Riz complet + poulet = glycemie stable + reparation musculaire."},
+  {id:"dj2",moment:"Dejeuner",nom:"Salade saumon avocat",temps:10,kcal:520,p:34,g:15,l:32,
+   tags:["ventre plat","anti-inflammatoire","omega3"],
+   ingredients:["Saumon (150g)","Avocat (1/2)","Salade verte (100g)","Tomate (200g)","Huile olive (1 cs)"],
+   recette:"Poele le saumon 4 min de chaque cote. Prepare la salade avec tomate et avocat. Vinaigrette legere.",
+   pourquoi:"Omega-3 du saumon = anti-inflammatoire pour les articulations ET brule-graisse. Avocat = lipides sains coupe-faim."},
+  {id:"dj3",moment:"Dejeuner",nom:"Omelette legumes express",temps:10,kcal:350,p:30,g:12,l:18,
+   tags:["rapide","faible calories","ventre plat"],
+   ingredients:["Oeuf entier","Blanc oeuf x3","Courgette (200g)","Champignons (150g)","Huile olive (1 cs)"],
+   recette:"Saute les legumes 3 min. Ajoute les oeufs battus. Couvercle 3 min. Plie et sers.",
+   pourquoi:"Faible en glucides = ideal pour secher. Rapide et rassasiant."},
+  {id:"dj4",moment:"Dejeuner",nom:"Bowl thon quinoa",temps:12,kcal:460,p:38,g:50,l:8,
+   tags:["equilibre","muscle","energie"],
+   ingredients:["Thon en boite","Quinoa (80g cru)","Haricots verts (200g)","Tomate (200g)"],
+   recette:"Cuis le quinoa 12 min. Mixe avec le thon egoutte, les haricots verts vapeur et la tomate.",
+   pourquoi:"Quinoa = proteines completes + glucides lents. Repas parfait avant le sport."},
+  // DINER
+  {id:"di1",moment:"Diner",nom:"Poulet legumes vapeur",temps:15,kcal:320,p:38,g:18,l:6,
+   tags:["seche","ventre plat","leger"],
+   ingredients:["Poulet (150g)","Brocoli (200g)","Courgette (200g)","Epinards (100g)"],
+   recette:"Cuis le poulet grill 7 min. Legumes vapeur 6 min. Assaisonne avec herbes et citron.",
+   pourquoi:"Diner leger = meilleure recuperation et brule-graisse nocturne. Pas de glucides le soir."},
+  {id:"di2",moment:"Diner",nom:"Crevettes wok rapide",temps:10,kcal:280,p:30,g:15,l:8,
+   tags:["rapide","seche","leger"],
+   ingredients:["Crevettes (150g)","Courgette (200g)","Champignons (150g)","Huile olive (1 cs)"],
+   recette:"Wok chaud. Crevettes 3 min. Ajoute les legumes 3 min. Sauce soja legere.",
+   pourquoi:"Ultra leger le soir. Proteines maigres + legumes = parfait pour secher."},
+  {id:"di3",moment:"Diner",nom:"Steak haricots verts",temps:12,kcal:350,p:30,g:15,l:14,
+   tags:["muscle","seche","equilibre"],
+   ingredients:["Steak haché 5%","Haricots verts (200g)","Tomate (200g)"],
+   recette:"Grill le steak 4 min de chaque cote. Haricots verts vapeur 7 min. Salade tomate en accompagnement.",
+   pourquoi:"Fer du boeuf + proteines = muscle. Pas de glucides le soir pour secher."},
+  // COLLATIONS
+  {id:"co1",moment:"Collation",nom:"Shake post-training",temps:2,kcal:200,p:28,g:20,l:2,
+   tags:["muscle","recuperation","rapide"],
+   ingredients:["Shake proteine (1 dose)","Banane"],
+   recette:"Mixe le shake avec la banane et de l'eau ou du lait. Consomme dans les 30 min apres l'entrainement.",
+   pourquoi:"Fenetre anabolique : proteines + glucides rapides dans les 30 min post-sport = recuperation optimale."},
+  {id:"co2",moment:"Collation",nom:"Yaourt grec amandes",temps:2,kcal:275,p:16,g:9,l:20,
+   tags:["coupe-faim","rapide","ventre plat"],
+   ingredients:["Yaourt grec nature","Amandes (30g)"],
+   recette:"Melange simplement. Optionnel : quelques baies.",
+   pourquoi:"Proteines + lipides sains = coupe-faim 3-4h. Pas de pic de glycemie."},
+  {id:"co3",moment:"Collation",nom:"Blanc oeuf fromage blanc",temps:3,kcal:160,p:25,g:6,l:1,
+   tags:["seche","muscle","faible calories"],
+   ingredients:["Blanc oeuf x3","Fromage blanc 0%"],
+   recette:"Brouille les blancs 2 min. Sers avec le fromage blanc.",
+   pourquoi:"Maximum de proteines, minimum de calories. Parfait pour secher."},
+];
+
+// ============================================================
+// DATA
+// ============================================================
+var DEFAULT_PROFIL = {
+  prenom:"Athlete",taille:170,poidsDepart:85,poidsCible:78,
+  age:35,objectifMois:5,dateDepart:new Date().toISOString().split("T")[0],
+  calories:2150,proteines:170,glucides:190,lipides:60,
+  objectif:"ventre_plat",
+  alimentsFavoris:[],
+  alimentsCustom:[]
+};
+var profil={},poidsLog=[],chargesLog={},seancesLog=[],calLog=[],alimentsCustom=[];
+var seanceActive=null,seanceChecked={};
+var timerInterval=null,timerRemaining=0,timerTotal=0,timerPaused=false;
+var selectedAliments=[];
+
+function loadAll(){
+  try{
+    var p=localStorage.getItem("ft3-profil"); profil=p?JSON.parse(p):Object.assign({},DEFAULT_PROFIL);
+    var w=localStorage.getItem("ft3-poids");  poidsLog=w?JSON.parse(w):[];
+    var c=localStorage.getItem("ft3-charges");chargesLog=c?JSON.parse(c):{};
+    var s=localStorage.getItem("ft3-seances");seancesLog=s?JSON.parse(s):[];
+    var cl=localStorage.getItem("ft3-cal");   calLog=cl?JSON.parse(cl):[];
+    var ac=localStorage.getItem("ft3-aliments");alimentsCustom=ac?JSON.parse(ac):[];
+    if(!profil.alimentsFavoris) profil.alimentsFavoris=[];
+    if(!profil.objectif) profil.objectif="ventre_plat";
+  }catch(e){profil=Object.assign({},DEFAULT_PROFIL);}
+}
+function saveAll(){
+  try{
+    localStorage.setItem("ft3-profil",JSON.stringify(profil));
+    localStorage.setItem("ft3-poids",JSON.stringify(poidsLog));
+    localStorage.setItem("ft3-charges",JSON.stringify(chargesLog));
+    localStorage.setItem("ft3-seances",JSON.stringify(seancesLog));
+    localStorage.setItem("ft3-cal",JSON.stringify(calLog));
+    localStorage.setItem("ft3-aliments",JSON.stringify(alimentsCustom));
+  }catch(e){}
+}
+function showToast(msg,col){
+  var t=document.getElementById("toast");
+  t.textContent=msg;t.style.display="block";
+  t.style.borderColor=col||"var(--g)";t.style.color=col||"var(--g)";
+  t.style.border="1px solid "+(col||"var(--g)");
+  setTimeout(function(){t.style.display="none";},2500);
+}
+function showPage(n){
+  document.querySelectorAll(".pg").forEach(function(p){p.classList.remove("active");});
+  document.querySelectorAll(".nb").forEach(function(b){
+    b.classList.toggle("active", b.dataset.page===n);
+  });
+  document.getElementById("page-"+n).classList.add("active");
+  ({dashboard:renderDashboard,programme:renderProgramme,seance:renderSeance,nutrition:renderNutrition,stats:renderStats})[n]();
+}
+function openMo(id){document.getElementById(id).classList.add("open");}
+function closeMo(id){document.getElementById(id).classList.remove("open");}
+
+// ── HELPERS ──────────────────────────────────────────────────────────────
+function dernierPoids(){return poidsLog.length?poidsLog[poidsLog.length-1].poids:(profil.poidsDepart||85);}
+function imc(){var h=(profil.taille||170)/100;return(dernierPoids()/(h*h)).toFixed(1);}
+function poidsPerdu(){return Math.max(0,((profil.poidsDepart||85)-dernierPoids())).toFixed(1);}
+function poidsRestant(){return Math.max(0,(dernierPoids()-(profil.poidsCible||78))).toFixed(1);}
+function progPct(){var tot=(profil.poidsDepart||85)-(profil.poidsCible||78);var fait=(profil.poidsDepart||85)-dernierPoids();return tot>0?Math.min(100,Math.round(fait/tot*100)):0;}
+function joursEcoules(){return Math.max(0,Math.floor((new Date()-new Date(profil.dateDepart||new Date()))/86400000));}
+function todayJour(){return["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"][new Date().getDay()];}
+function todaySeance(){return PROGRAMME.find(function(p){return p.jour===todayJour();})||PROGRAMME[0];}
+function nbSeancesSem(){
+  var lundi=new Date();lundi.setDate(lundi.getDate()-((lundi.getDay()+6)%7));lundi.setHours(0,0,0,0);
+  var fin=new Date(lundi);fin.setDate(fin.getDate()+6);
+  return seancesLog.filter(function(s){var d=new Date(s.date);return d>=lundi&&d<=fin;}).length;
+}
+function parseTimer(r){
+  var m=String(r).match(/(\d+)(?:-\d+)?\s*sec/i);if(m)return parseInt(m[1]);
+  var m2=String(r).match(/(\d+)\s*min/i);if(m2)return parseInt(m2[1])*60;
+  return 0;
+}
+
+// ── TIMER ──────────────────────────────────────────────────────────────
+function startTimer(secs,label){
+  timerTotal=secs;timerRemaining=secs;timerPaused=false;
+  document.getElementById("t-name").textContent=label||"";
+  document.getElementById("timer-ov").classList.add("open");
+  document.getElementById("t-pause-btn").textContent="Pause";
+  updateTimerDisplay();
+  if(timerInterval)clearInterval(timerInterval);
+  timerInterval=setInterval(function(){
+    if(timerPaused)return;
+    timerRemaining--;updateTimerDisplay();
+    if(timerRemaining<=0){
+      clearInterval(timerInterval);
+      document.getElementById("timer-ov").classList.remove("open");
+      if(navigator.vibrate)navigator.vibrate([200,100,200]);
+      showToast("Temps ecoule !","var(--g)");
+    }
+  },1000);
+}
+function updateTimerDisplay(){
+  var m=Math.floor(timerRemaining/60),s=timerRemaining%60;
+  document.getElementById("t-num").textContent=timerRemaining>=60?(m+":"+(s<10?"0":"")+s):String(timerRemaining);
+  document.getElementById("t-lbl").textContent=timerRemaining>=60?"min":"sec";
+  var pct=timerTotal>0?timerRemaining/timerTotal:0;
+  var circ=2*Math.PI*82;
+  document.getElementById("t-arc").setAttribute("stroke-dashoffset",String(circ*(1-pct)));
+  var col=timerRemaining>timerTotal*0.5?"var(--g)":timerRemaining>timerTotal*0.25?"var(--o)":"var(--r)";
+  document.getElementById("t-arc").setAttribute("stroke",col);
+  document.getElementById("t-num").style.color=col;
+}
+function pauseTimer(){timerPaused=!timerPaused;document.getElementById("t-pause-btn").textContent=timerPaused?"Reprendre":"Pause";}
+function stopTimer(){clearInterval(timerInterval);document.getElementById("timer-ov").classList.remove("open");}
+
+// ── POIDS CHART ──────────────────────────────────────────────────────────
+function poidsChart(){
+  if(poidsLog.length<2)return "<div style='color:#3d4a5c;text-align:center;padding:20px;font-size:12px;'>Enregistrez votre poids pour voir la courbe</div>";
+  var vals=poidsLog.slice(-14).map(function(p){return p.poids;});
+  var dates=poidsLog.slice(-14).map(function(p){return p.date.slice(5);});
+  var W=300,H=100,PL=32,PR=12,PT=10,PB=22,cW=W-PL-PR,cH=H-PT-PB;
+  var cible=profil.poidsCible||78;
+  var minV=Math.min.apply(null,vals.concat([cible]))-0.5;
+  var maxV=Math.max.apply(null,vals)+0.5;
+  var xS=cW/Math.max(vals.length-1,1);
+  function px(i){return PL+i*xS;}
+  function py(v){return PT+cH-(v-minV)/(maxV-minV)*cH;}
+  var pts=vals.map(function(v,i){return px(i)+","+py(v);}).join(" ");
+  var fill="M"+px(0)+","+py(vals[0]);for(var i=1;i<vals.length;i++)fill+=" L"+px(i)+","+py(vals[i]);
+  fill+=" L"+px(vals.length-1)+","+(PT+cH)+" L"+px(0)+","+(PT+cH)+" Z";
+  var step=Math.ceil(vals.length/5);
+  var svg='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:'+H+'px;">'
+    +'<defs><linearGradient id="wg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00c896" stop-opacity="0.3"/><stop offset="100%" stop-color="#00c896" stop-opacity="0"/></linearGradient></defs>'
+    +'<line x1="'+PL+'" y1="'+PT+'" x2="'+PL+'" y2="'+(PT+cH)+'" stroke="#1e2d42" stroke-width="1"/>'
+    +'<text x="'+(PL-3)+'" y="'+(PT+5)+'" fill="#5b7a9e" font-size="8" text-anchor="end">'+maxV.toFixed(1)+'</text>'
+    +'<text x="'+(PL-3)+'" y="'+(PT+cH+5)+'" fill="#5b7a9e" font-size="8" text-anchor="end">'+minV.toFixed(1)+'</text>'
+    +(cible>=minV&&cible<=maxV?'<line x1="'+PL+'" y1="'+py(cible)+'" x2="'+(W-PR)+'" y2="'+py(cible)+'" stroke="var(--o)" stroke-width="1" stroke-dasharray="4,2"/><text x="'+(W-PR+2)+'" y="'+(py(cible)+4)+'" fill="var(--o)" font-size="7">'+cible+'</text>':"")
+    +'<path d="'+fill+'" fill="url(#wg)"/>'
+    +'<polyline points="'+pts+'" fill="none" stroke="var(--g)" stroke-width="2.5"/>'
+    +vals.map(function(v,i){return'<circle cx="'+px(i)+'" cy="'+py(v)+'" r="3" fill="var(--g)"/>'+(i%step===0?'<text x="'+px(i)+'" y="'+(H-5)+'" fill="#5b7a9e" font-size="7" text-anchor="middle">'+dates[i]+'</text>':"");}).join("")
+    +'</svg>';
+  return svg;
+}
+
+// ── DASHBOARD ──────────────────────────────────────────────────────────
+function renderDashboard(){
+  var poids=dernierPoids(),pp=progPct(),today=todaySeance(),sem=nbSeancesSem();
+  var obj=profil.objectif==="ventre_plat"?"Ventre plat & tonus":"Perte de poids";
+  document.getElementById("hdr-obj").textContent=obj;
+  document.getElementById("hs").textContent=(profil.prenom||"Athlete")+" · "+poids+"kg · J"+joursEcoules();
+  var h="";
+  // Objectif
+  h+='<div class="obj-bar">';
+  h+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">';
+  h+='<div style="font-size:10px;color:#5b7a9e;letter-spacing:1px;text-transform:uppercase;">Objectif '+profil.objectifMois+' mois</div>';
+  h+='<div style="font-size:10px;color:var(--o);font-weight:700;">'+obj+'</div></div>';
+  h+='<div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:10px;">';
+  h+='<div style="text-align:center;"><div style="font-size:30px;font-weight:800;color:var(--g);">'+poids+'</div><div style="font-size:10px;color:var(--mu);">kg actuel</div></div>';
+  h+='<div style="font-size:16px;color:var(--bd);">&#8594;</div>';
+  h+='<div style="text-align:center;"><div style="font-size:30px;font-weight:800;color:var(--o);">'+(profil.poidsCible||78)+'</div><div style="font-size:10px;color:var(--mu);">kg objectif</div></div>';
+  h+='</div>';
+  h+='<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:5px;"><span style="color:var(--mu);">Progression</span><span style="color:var(--g);font-weight:700;">'+pp+'%</span></div>';
+  h+='<div class="pt"><div class="pf" style="width:'+pp+'%;background:linear-gradient(90deg,var(--g),var(--b));"></div></div>';
+  h+='<div style="display:flex;justify-content:space-around;margin-top:10px;">';
+  h+='<div style="text-align:center;"><div style="color:var(--g);font-weight:800;">'+poidsPerdu()+'kg</div><div style="font-size:9px;color:var(--mu);">Perdu</div></div>';
+  h+='<div style="text-align:center;"><div style="color:var(--o);font-weight:800;">'+poidsRestant()+'kg</div><div style="font-size:9px;color:var(--mu);">Restant</div></div>';
+  h+='<div style="text-align:center;"><div style="color:var(--b);font-weight:800;">'+joursEcoules()+'j</div><div style="font-size:9px;color:var(--mu);">Ecoules</div></div>';
+  h+='<div style="text-align:center;"><div style="color:var(--p);font-weight:800;">'+sem+'/6</div><div style="font-size:9px;color:var(--mu);">Seances</div></div>';
+  h+='</div></div>';
+  // KPIs
+  h+='<div class="kpi2">';
+  h+='<div class="kb"><div class="kv" style="color:var(--g);">'+imc()+'</div><div class="kl">IMC</div></div>';
+  h+='<div class="kb"><div class="kv" style="color:var(--b);">'+seancesLog.length+'</div><div class="kl">Seances totales</div></div>';
+  h+='</div>';
+  // Poids chart
+  h+='<div class="card"><div class="ct">Courbe de poids</div>'+poidsChart();
+  h+='<div style="display:flex;gap:8px;margin-top:10px;align-items:flex-end;">';
+  h+='<div style="flex:1;"><label class="lbl">Nouveau poids</label><input type="number" id="np" class="inp" placeholder="'+poids+'" step="0.1"></div>';
+  h+='<button class="btn btn-s" style="width:auto;padding:9px 14px;" id="btn-add-poids">Enregistrer</button></div></div>';
+  // Seance du jour
+  h+='<div class="card" style="border-color:'+today.couleur+'33;border-left:3px solid '+today.couleur+';">';
+  h+='<div class="ct">Seance du jour — '+todayJour()+'</div>';
+  h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">';
+  h+='<span style="font-size:24px;">'+today.icone+'</span>';
+  h+='<div style="flex:1;"><div style="font-weight:700;">'+today.nom+'</div>';
+  h+='<div style="font-size:11px;color:var(--mu);">'+today.exercices.length+' exercices · '+today.focus+'</div></div></div>';
+  h+='<button class="btn btn-p" id="btn-start-today">Demarrer la seance</button></div>';
+  // Conseil du jour
+  var conseils=[
+    "Bois 2-3L d'eau par jour. La deshydratation ralentit le metabolisme de 3%.",
+    "Mange lentement. Il faut 20 min au cerveau pour ressentir la satiete.",
+    "Le sommeil est aussi important que le sport. 7-8h pour bruler les graisses.",
+    "Les abdos se font dans la cuisine : 70% alimentation, 30% sport.",
+    "Le gainage quotidien = ventre plat. Meme 3x45 sec par jour fait une difference.",
+    "Remplace une seance 8km constant par du HIIT : 2x plus efficace en 2x moins de temps.",
+    "Proteines a chaque repas = muscle preserve + metabolisme actif.",
+  ];
+  var conseil=conseils[joursEcoules()%conseils.length];
+  h+='<div class="alert-b"><strong>Conseil du jour :</strong> '+conseil+'</div>';
+  document.getElementById("page-dashboard").innerHTML=h;
+  document.getElementById("btn-add-poids").addEventListener("click",addPoids);
+  document.getElementById("btn-start-today").addEventListener("click",function(){startSeance(todayJour());});
+}
+function addPoids(){
+  var val=parseFloat(document.getElementById("np").value);
+  if(!val||val<30||val>250){showToast("Poids invalide","var(--r)");return;}
+  poidsLog.push({date:new Date().toISOString().split("T")[0],poids:val});
+  saveAll();showToast("Poids enregistre : "+val+"kg");renderDashboard();
+}
+
+// ── PROGRAMME ──────────────────────────────────────────────────────────
+function renderProgramme(){
+  var h="";
+  h+='<div class="card"><div class="ct">Planning semaine</div>';
+  h+='<div class="wg">';
+  var jc=["Lu","Ma","Me","Je","Ve","Sa","Di"];
+  PROGRAMME.slice(0,7).forEach(function(p,i){
+    h+='<div class="dp '+p.type+'" data-jour="'+p.jour+'"><div class="dj">'+jc[i]+'</div><div class="di">'+p.icone+'</div></div>';
+  });
+  h+='</div>';
+  h+='<div style="display:flex;gap:8px;font-size:10px;color:var(--mu);">';
+  h+='<span><span style="color:var(--g);">&#9632;</span> Muscu</span>';
+  h+='<span><span style="color:var(--r);">&#9632;</span> Cardio</span>';
+  h+='<span><span style="color:var(--p);">&#9632;</span> Renfo</span>';
+  h+='</div></div>';
+  // Seances principales
+  PROGRAMME.slice(0,7).forEach(function(p){
+    h+='<div class="card" style="border-left:3px solid '+p.couleur+';border-color:'+p.couleur+'33;">';
+    h+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">';
+    h+='<div style="display:flex;align-items:center;gap:8px;"><span style="font-size:20px;">'+p.icone+'</span>';
+    h+='<div><div style="font-weight:700;font-size:14px;">'+p.nom+'</div>';
+    h+='<div style="font-size:11px;color:var(--mu);">'+p.jour+' · '+p.exercices.length+' exos</div></div></div>';
+    h+='<button class="btn btn-s" style="width:auto;padding:7px 12px;font-size:12px;" data-start="'+p.jour+'">Go</button></div>';
+    p.exercices.forEach(function(e,ei){
+      h+='<div style="display:flex;align-items:center;padding:7px 0;border-bottom:1px solid #0e1b2a;gap:8px;cursor:pointer;" data-exo-jour="'+p.jour+'" data-exo-idx="'+ei+'">';
+      h+='<div style="flex:1;"><div style="font-size:12px;font-weight:600;color:#c9d1d9;">'+e.nom+'</div>';
+      h+='<div style="font-size:10px;color:var(--mu);">'+e.series+' x '+e.reps+'</div></div>';
+      h+='<div style="display:flex;gap:4px;">';
+      if(e.poids_corps)h+='<span class="tag tg" style="font-size:9px;">PC</span>';
+      if(e.statique)   h+='<span class="tag tb" style="font-size:9px;">ISO</span>';
+      h+='<span style="font-size:10px;color:#3d5268;">&#9432;</span></div></div>';
+    });
+    h+='</div>';
+  });
+  // Cardio bonus
+  h+='<div class="ct" style="margin-top:4px;">Seance cardio bonus</div>';
+  PROGRAMME.slice(7).forEach(function(p){
+    h+='<div class="card" style="border-left:3px solid '+p.couleur+';border-color:'+p.couleur+'33;">';
+    h+='<div style="display:flex;align-items:center;justify-content:space-between;">';
+    h+='<div style="display:flex;align-items:center;gap:8px;"><span style="font-size:20px;">'+p.icone+'</span>';
+    h+='<div><div style="font-weight:700;font-size:13px;">'+p.nom+'</div>';
+    h+='<div style="font-size:11px;color:var(--mu);">'+p.focus+'</div></div></div>';
+    h+='<button class="btn btn-s" style="width:auto;padding:7px 12px;font-size:12px;" data-start="'+p.jour+'">Go</button>';
+    h+='</div></div>';
+  });
+  document.getElementById("page-programme").innerHTML=h;
+  // Events
+  document.querySelectorAll("[data-start]").forEach(function(b){
+    b.addEventListener("click",function(){startSeance(this.dataset.start);});
+  });
+  document.querySelectorAll("[data-jour].dp").forEach(function(d){
+    d.addEventListener("click",function(){startSeance(this.dataset.jour);});
+  });
+  document.querySelectorAll("[data-exo-jour]").forEach(function(d){
+    d.addEventListener("click",function(){openExoInfo(this.dataset.exoJour,parseInt(this.dataset.exoIdx));});
+  });
+}
+
+// ── SEANCE ──────────────────────────────────────────────────────────────
+function startSeance(jour){
+  seanceActive=PROGRAMME.find(function(p){return p.jour===jour;})||PROGRAMME[0];
+  seanceChecked={};showPage("seance");
+}
+function openExoInfo(jourNom,ei){
+  var jour=PROGRAMME.find(function(p){return p.jour===jourNom;});
+  if(!jour)return;
+  var e=jour.exercices[ei];if(!e)return;
+  document.getElementById("mo-title").textContent=e.nom;
+  var secs=parseTimer(e.reps);
+  var charge=chargesLog[e.nom]||"";
+  var h="";
+  h+='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">';
+  var muscles=e.muscle.split("/");
+  muscles.forEach(function(m){h+='<span style="background:var(--g)22;border:1px solid var(--g)44;color:var(--g);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:700;">'+m.trim()+'</span>';});
+  if(e.poids_corps)h+='<span class="tag tg">Poids corps</span>';
+  if(e.statique)   h+='<span class="tag tb">Statique</span>';
+  h+='</div>';
+  h+='<div style="background:var(--bg);border-radius:8px;padding:10px;margin-bottom:10px;display:flex;justify-content:space-around;text-align:center;">';
+  h+='<div><div style="font-size:22px;font-weight:800;color:var(--g);">'+e.series+'</div><div style="font-size:10px;color:var(--mu);">series</div></div>';
+  h+='<div style="width:1px;background:var(--bd);"></div>';
+  h+='<div><div style="font-size:14px;font-weight:800;color:var(--o);">'+e.reps+'</div><div style="font-size:10px;color:var(--mu);">reps / duree</div></div>';
+  h+='</div>';
+  if(secs>0)h+='<button class="btn btn-s" style="margin-bottom:10px;" id="mo-timer-btn">Timer '+secs+' sec</button>';
+  h+='<div class="alert-b" style="margin-bottom:10px;font-size:12px;">'+e.notes+'</div>';
+  if(!e.poids_corps){
+    h+='<div style="margin-bottom:10px;"><label class="lbl">Charge utilisee (kg)</label>';
+    h+='<div style="display:flex;gap:8px;"><input type="number" id="mo-charge" class="inp" value="'+charge+'" placeholder="kg" step="0.5">';
+    h+='<button class="btn btn-s" style="width:auto;padding:8px 14px;" id="mo-save-charge">Sauver</button></div></div>';
+  }
+  if(e.alts&&e.alts.length){
+    h+='<div class="ct" style="margin-top:6px;">Alternatives</div>';
+    e.alts.forEach(function(a){
+      h+='<div style="background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:10px;margin-bottom:6px;">';
+      h+='<div style="font-size:13px;font-weight:700;color:#c9d1d9;">'+a.nom+'</div>';
+      h+='<div style="font-size:11px;color:var(--mu);">'+a.why+'</div></div>';
+    });
+  }
+  document.getElementById("mo-content").innerHTML=h;
+  openMo("mo-exo");
+  if(secs>0){var tb=document.getElementById("mo-timer-btn");if(tb)tb.addEventListener("click",function(){startTimer(secs,e.nom);});}
+  var sc=document.getElementById("mo-save-charge");
+  if(sc)sc.addEventListener("click",function(){
+    var val=parseFloat(document.getElementById("mo-charge").value);
+    if(!val)return;chargesLog[e.nom]=val;saveAll();showToast(val+"kg sauvegarde");
+  });
+}
+function renderSeance(){
+  if(!seanceActive){seanceActive=todaySeance();seanceChecked={};}
+  var p=seanceActive,done=p.exercices.filter(function(e){return seanceChecked[e.nom];}).length;
+  var total=p.exercices.length,pct=Math.round(done/total*100);
+  var h="";
+  h+='<div style="background:linear-gradient(135deg,#0a1020,#0d1520);border-radius:12px;padding:12px;margin-bottom:10px;border:1px solid '+p.couleur+'33;">';
+  h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">';
+  h+='<span style="font-size:26px;">'+p.icone+'</span>';
+  h+='<div><div style="font-size:15px;font-weight:800;">'+p.nom+'</div>';
+  h+='<div style="font-size:11px;color:var(--mu);">'+done+'/'+total+' · '+p.focus+'</div></div></div>';
+  h+='<div class="pt"><div class="pf" style="width:'+pct+'%;background:'+p.couleur+';"></div></div></div>';
+  p.exercices.forEach(function(e,i){
+    var isDone=!!seanceChecked[e.nom];
+    var charge=chargesLog[e.nom]||"";
+    var secs=parseTimer(e.reps);
+    h+='<div class="card" style="'+(isDone?"opacity:0.5;":"")+'border-color:'+(isDone?"var(--bd)":p.couleur+"33")+';margin-bottom:8px;">';
+    h+='<div style="display:flex;gap:10px;align-items:flex-start;">';
+    h+='<div class="cb'+(isDone?" done":"")+'" data-chk="'+e.nom+'">'+( isDone?"&#10003;":"")+'</div>';
+    h+='<div style="flex:1;">';
+    h+='<div style="font-size:13px;font-weight:700;color:'+(isDone?"var(--mu)":"var(--tx)")+';'+(isDone?"text-decoration:line-through;":"")+';" data-exo-jour="'+p.jour+'" data-exo-idx="'+i+'" style="cursor:pointer;">'+e.nom+' <span style="font-size:10px;color:#3d5268;font-weight:400;">&#9432;</span></div>';
+    h+='<div style="font-size:11px;color:var(--mu);margin:3px 0 6px;">'+e.series+' series x '+e.reps+'</div>';
+    h+='<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px;">';
+    if(e.poids_corps)h+='<span class="tag tg" style="font-size:9px;">PC</span>';
+    if(e.statique)   h+='<span class="tag tb" style="font-size:9px;">ISO</span>';
+    if(secs>0)h+='<span class="tag tp" style="font-size:9px;">'+secs+'s</span>';
+    if(e.alts&&e.alts.length)h+='<span class="tag to" style="font-size:9px;">'+e.alts.length+' alts</span>';
+    h+='</div>';
+    if(secs>0)h+='<button class="btn btn-s" style="width:auto;padding:5px 12px;font-size:11px;margin-bottom:6px;" data-timer-secs="'+secs+'" data-timer-nom="'+e.nom+'">Timer '+secs+'s</button>';
+    if(!e.poids_corps){
+      h+='<div style="display:flex;gap:6px;align-items:center;">';
+      h+='<input type="number" id="ch-'+i+'" class="inp" style="width:75px;font-size:12px;" placeholder="kg" value="'+charge+'" step="0.5">';
+      h+='<button class="btn btn-s" style="width:auto;padding:5px 10px;font-size:11px;" data-save-charge="'+e.nom+'" data-charge-idx="'+i+'">OK</button></div>';
+    }
+    h+='</div></div></div>';
+  });
+  if(done===total)h+='<button class="btn btn-p" id="btn-terminer" style="background:linear-gradient(90deg,var(--g),#059669);">Seance terminee ! Bravo</button>';
+  // Changer seance
+  h+='<div class="card"><div class="ct">Changer de seance</div><div style="display:flex;flex-wrap:wrap;gap:6px;">';
+  PROGRAMME.forEach(function(s){
+    var sel=seanceActive&&seanceActive.jour===s.jour;
+    h+='<button class="seance-chip'+(sel?" active":"")+'" data-start="'+s.jour+'">'+s.icone+' '+s.jour.replace("Cardio-","")+'</button>';
+  });
+  h+='</div></div>';
+  document.getElementById("page-seance").innerHTML=h;
+  // Events
+  document.querySelectorAll("[data-chk]").forEach(function(el){
+    el.addEventListener("click",function(){seanceChecked[this.dataset.chk]=!seanceChecked[this.dataset.chk];renderSeance();});
+  });
+  document.querySelectorAll("[data-exo-jour]").forEach(function(el){
+    el.addEventListener("click",function(){openExoInfo(this.dataset.exoJour,parseInt(this.dataset.exoIdx));});
+  });
+  document.querySelectorAll("[data-timer-secs]").forEach(function(el){
+    el.addEventListener("click",function(){startTimer(parseInt(this.dataset.timerSecs),this.dataset.timerNom);});
+  });
+  document.querySelectorAll("[data-save-charge]").forEach(function(el){
+    el.addEventListener("click",function(){
+      var val=parseFloat(document.getElementById("ch-"+this.dataset.chargeIdx).value);
+      if(!val)return;chargesLog[this.dataset.saveCharge]=val;saveAll();showToast(val+"kg sauvegarde");
+    });
+  });
+  document.querySelectorAll("[data-start]").forEach(function(b){
+    b.addEventListener("click",function(){startSeance(this.dataset.start);});
+  });
+  var tb=document.getElementById("btn-terminer");
+  if(tb)tb.addEventListener("click",terminerSeance);
+}
+function terminerSeance(){
+  seancesLog.push({date:new Date().toISOString().split("T")[0],nom:seanceActive.nom,type:seanceActive.type});
+  saveAll();seanceChecked={};showToast("Bravo ! Seance terminee","var(--g)");showPage("dashboard");
+}
+
+// ── NUTRITION ──────────────────────────────────────────────────────────
+function getAllAliments(){
+  var all=[];
+  Object.values(ALIMENTS_BASE).forEach(function(cat){cat.forEach(function(a){all.push(a);});});
+  alimentsCustom.forEach(function(a){all.push(a);});
+  return all;
+}
+function getRepasForObjectif(){
+  return REPAS_DB.filter(function(r){
+    if(profil.objectif==="ventre_plat") return r.tags.indexOf("ventre plat")>=0||r.tags.indexOf("seche")>=0;
+    return true;
+  });
+}
+function getMealsWithAliments(alims){
+  if(!alims||!alims.length) return REPAS_DB;
+  return REPAS_DB.filter(function(r){
+    return alims.some(function(a){
+      return r.ingredients.some(function(ing){return ing.toLowerCase().indexOf(a.toLowerCase())>=0;});
+    });
+  });
+}
+
+function renderNutrition(){
+  var today=new Date().toISOString().split("T")[0];
+  var tl=calLog.find(function(c){return c.date===today;})||{kcal:0,proteines:0,glucides:0,lipides:0,repas:[]};
+  var obj=profil.calories||2150;
+  var h="";
+
+  // Tabs nutrition
+  h+='<div style="display:flex;gap:6px;margin-bottom:12px;" id="nutri-tabs">';
+  h+='<button class="seance-chip active" data-ntab="repas">Repas du jour</button>';
+  h+='<button class="seance-chip" data-ntab="suggestions">Suggestions</button>';
+  h+='<button class="seance-chip" data-ntab="aliments">Aliments</button>';
+  h+='</div>';
+  h+='<div id="nutri-content"></div>';
+  document.getElementById("page-nutrition").innerHTML=h;
+  document.querySelectorAll("[data-ntab]").forEach(function(b){
+    b.addEventListener("click",function(){
+      document.querySelectorAll("[data-ntab]").forEach(function(x){x.classList.remove("active");});
+      this.classList.add("active");
+      renderNutriTab(this.dataset.ntab);
+    });
+  });
+  renderNutriTab("repas");
+}
+
+function renderNutriTab(tab){
+  var today=new Date().toISOString().split("T")[0];
+  var tl=calLog.find(function(c){return c.date===today;})||{kcal:0,proteines:0,glucides:0,lipides:0,repas:[]};
+  var obj=profil.calories||2150;
+  var h="";
+
+  if(tab==="repas"){
+    // Calories
+    h+='<div class="card">';
+    h+='<div style="text-align:center;margin-bottom:10px;">';
+    h+='<div style="font-size:40px;font-weight:800;color:'+(tl.kcal>obj?"var(--r)":"var(--g)")+';line-height:1;">'+tl.kcal+'</div>';
+    h+='<div style="font-size:12px;color:var(--mu);">/ '+obj+' kcal</div>';
+    h+='<div style="font-size:11px;margin-top:4px;color:'+(obj-tl.kcal>0?"var(--o)":"var(--r)")+'">'+(obj-tl.kcal>0?"Restant : "+(obj-tl.kcal)+" kcal":"Depasse de "+(tl.kcal-obj)+" kcal")+'</div>';
+    h+='</div>';
+    var kp=Math.min(100,Math.round(tl.kcal/obj*100));
+    h+='<div class="pt" style="margin-bottom:10px;"><div class="pf" style="width:'+kp+'%;background:'+(tl.kcal>obj?"var(--r)":"linear-gradient(90deg,var(--g),var(--b))");h+=';">'+'</div></div>';
+    h+='</div>';
+    // Macros
+    var macros=[{l:"Proteines",v:tl.proteines,o:profil.proteines||170,c:"var(--b)"},{l:"Glucides",v:tl.glucides,o:profil.glucides||190,c:"var(--o)"},{l:"Lipides",v:tl.lipides,o:profil.lipides||60,c:"var(--r)"}];
+    h+='<div class="macro-row">';
+    macros.forEach(function(m){
+      var mp=Math.min(100,Math.round((m.v||0)/m.o*100));
+      h+='<div class="kb"><div style="font-size:17px;font-weight:800;color:'+m.c+';">'+(m.v||0)+'g</div>';
+      h+='<div style="font-size:9px;color:var(--mu);">/ '+m.o+'g</div><div style="font-size:9px;color:var(--mu);">'+m.l+'</div>';
+      h+='<div style="background:var(--bg);border-radius:10px;height:3px;margin-top:5px;overflow:hidden;"><div style="width:'+mp+'%;height:100%;background:'+m.c+';border-radius:10px;"></div></div></div>';
+    });
+    h+='</div>';
+    // Ajouter repas rapide
+    h+='<div class="card"><div class="ct">Ajouter un aliment</div>';
+    h+='<div class="mb10"><label class="lbl">Nom</label><input type="text" id="n-nom" class="inp" placeholder="Poulet 150g, riz..."></div>';
+    h+='<div class="fg2"><div><label class="lbl">Calories</label><input type="number" id="n-k" class="inp" placeholder="kcal"></div>';
+    h+='<div><label class="lbl">Proteines (g)</label><input type="number" id="n-p" class="inp" placeholder="g"></div></div>';
+    h+='<div class="fg2"><div><label class="lbl">Glucides (g)</label><input type="number" id="n-g" class="inp" placeholder="g"></div>';
+    h+='<div><label class="lbl">Lipides (g)</label><input type="number" id="n-l" class="inp" placeholder="g"></div></div>';
+    h+='<button class="btn btn-p" id="btn-add-repas">Ajouter</button></div>';
+    // Liste repas du jour
+    if((tl.repas||[]).length){
+      h+='<div class="card"><div class="ct">Repas du jour</div>';
+      (tl.repas||[]).forEach(function(r,i){
+        h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #0e1b2a;">';
+        h+='<div><div style="font-size:13px;font-weight:600;">'+r.nom+'</div><div style="font-size:10px;color:var(--mu);">P:'+r.prot+'g G:'+r.gluc+'g L:'+r.lip+'g</div></div>';
+        h+='<div style="display:flex;align-items:center;gap:8px;"><span style="color:var(--g);font-weight:700;">'+r.kcal+'</span><button class="btn btn-r" style="width:auto;padding:4px 8px;font-size:11px;" data-del-repas="'+i+'">x</button></div></div>';
+      });
+      h+='</div>';
+    }
+    // Boissons recommandees
+    h+='<div class="card"><div class="ct">Boissons recommandees ventre plat</div>';
+    var boissons=ALIMENTS_BASE.boissons.filter(function(b){return b.kcal<20;});
+    boissons.forEach(function(b){
+      h+='<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid #0e1b2a;">';
+      h+='<div><div style="font-size:12px;font-weight:600;color:#c9d1d9;">'+b.nom+'</div></div>';
+      h+='<div style="display:flex;gap:6px;align-items:center;"><span style="color:var(--g);font-size:11px;">'+b.kcal+' kcal</span>';
+      h+='<button class="btn btn-s" style="width:auto;padding:4px 8px;font-size:10px;" data-add-boisson="'+b.nom+'" data-bk="'+b.kcal+'" data-bp="'+b.p+'" data-bg="'+b.g+'" data-bl="'+b.l+'">+</button></div></div>';
+    });
+    h+='</div>';
+    document.getElementById("nutri-content").innerHTML=h;
+    document.getElementById("btn-add-repas").addEventListener("click",addRepas);
+    document.querySelectorAll("[data-del-repas]").forEach(function(b){
+      b.addEventListener("click",function(){delRepas(parseInt(this.dataset.delRepas));});
+    });
+    document.querySelectorAll("[data-add-boisson]").forEach(function(b){
+      b.addEventListener("click",function(){
+        addRepasAuto(this.dataset.addBoisson,parseInt(this.dataset.bk),parseInt(this.dataset.bp),parseInt(this.dataset.bg),parseInt(this.dataset.bl));
+      });
+    });
+
+  } else if(tab==="suggestions"){
+    h+='<div class="alert-g" style="margin-bottom:10px;"><strong>Objectif : '+( profil.objectif==="ventre_plat"?"Ventre plat & tonus":"Perte de poids")+'</strong><br>Repas adaptes pour bruler les graisses rapidement et reduire le ventre.</div>';
+    // Selector aliments favoris
+    h+='<div class="card"><div class="ct">Filtrer par aliments que j\'ai</div>';
+    h+='<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;" id="alim-chips">';
+    var topAlims=["Poulet","Oeuf","Saumon","Thon","Fromage blanc","Yaourt grec","Riz","Flocons avoine","Brocoli","Avocat"];
+    topAlims.forEach(function(a){
+      var sel=profil.alimentsFavoris&&profil.alimentsFavoris.indexOf(a)>=0;
+      h+='<div class="food-chip'+(sel?" selected":"")+'" data-alim="'+a+'">'+a+'</div>';
+    });
+    h+='</div></div>';
+    // Repas suggeres
+    var repasFiltre=getMealsWithAliments(profil.alimentsFavoris&&profil.alimentsFavoris.length?profil.alimentsFavoris:null);
+    var moments=["Petit-dejeuner","Dejeuner","Collation","Diner"];
+    moments.forEach(function(m){
+      var repas=repasFiltre.filter(function(r){return r.moment===m;});
+      if(!repas.length)return;
+      h+='<div class="ct">'+m+'</div>';
+      repas.forEach(function(r){
+        h+='<div class="meal-card" data-meal-id="'+r.id+'">';
+        h+='<div style="display:flex;align-items:center;justify-content:space-between;">';
+        h+='<div class="meal-title">'+r.nom+'</div>';
+        h+='<div style="font-size:11px;color:var(--g);font-weight:700;">'+r.kcal+' kcal</div></div>';
+        h+='<div class="meal-meta">'+r.temps+' min · P:'+r.p+'g G:'+r.g+'g L:'+r.l+'g</div>';
+        h+='<div class="meal-tags">';
+        r.tags.forEach(function(t){h+='<span class="tag tg" style="font-size:9px;padding:2px 7px;">'+t+'</span>';});
+        h+='</div></div>';
+      });
+    });
+    document.getElementById("nutri-content").innerHTML=h;
+    document.querySelectorAll(".food-chip").forEach(function(c){
+      c.addEventListener("click",function(){
+        var a=this.dataset.alim;
+        if(!profil.alimentsFavoris)profil.alimentsFavoris=[];
+        var idx=profil.alimentsFavoris.indexOf(a);
+        if(idx>=0)profil.alimentsFavoris.splice(idx,1);else profil.alimentsFavoris.push(a);
+        saveAll();renderNutriTab("suggestions");
+      });
+    });
+    document.querySelectorAll(".meal-card").forEach(function(c){
+      c.addEventListener("click",function(){openMealModal(this.dataset.mealId);});
+    });
+
+  } else if(tab==="aliments"){
+    h+='<div class="card"><div class="ct">Ajouter un aliment personnalise</div>';
+    h+='<div class="mb10"><label class="lbl">Nom</label><input type="text" id="ca-nom" class="inp" placeholder="Mon aliment"></div>';
+    h+='<div class="fg2"><div><label class="lbl">Calories</label><input type="number" id="ca-k" class="inp" placeholder="kcal"></div>';
+    h+='<div><label class="lbl">Proteines (g)</label><input type="number" id="ca-p" class="inp" placeholder="g"></div></div>';
+    h+='<div class="fg2"><div><label class="lbl">Glucides (g)</label><input type="number" id="ca-g" class="inp" placeholder="g"></div>';
+    h+='<div><label class="lbl">Lipides (g)</label><input type="number" id="ca-l" class="inp" placeholder="g"></div></div>';
+    h+='<button class="btn btn-p" id="btn-add-aliment">Ajouter a ma liste</button></div>';
+    // Liste aliments par categorie
+    var cats={Proteines:ALIMENTS_BASE.proteines,Glucides:ALIMENTS_BASE.glucides,Legumes:ALIMENTS_BASE.legumes,Lipides:ALIMENTS_BASE.lipides,Boissons:ALIMENTS_BASE.boissons};
+    if(alimentsCustom.length){cats["Mes aliments"]=alimentsCustom;}
+    Object.keys(cats).forEach(function(cat){
+      h+='<div class="ct">'+cat+'</div>';
+      h+='<div class="card">';
+      cats[cat].forEach(function(a,ai){
+        h+='<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid #0e1b2a;">';
+        h+='<div><div style="font-size:12px;font-weight:600;color:#c9d1d9;">'+a.nom+'</div>';
+        h+='<div style="font-size:10px;color:var(--mu);">P:'+a.p+'g G:'+a.g+'g L:'+a.l+'g</div></div>';
+        h+='<div style="display:flex;gap:6px;align-items:center;">';
+        h+='<span style="color:var(--g);font-size:11px;font-weight:700;">'+a.kcal+' kcal</span>';
+        if(cat==="Mes aliments"){
+          h+='<button class="btn btn-r" style="width:auto;padding:3px 7px;font-size:10px;" data-del-aliment="'+ai+'">x</button>';
+        }
+        h+='</div></div>';
+      });
+      h+='</div>';
+    });
+    document.getElementById("nutri-content").innerHTML=h;
+    document.getElementById("btn-add-aliment").addEventListener("click",addAlimentCustom);
+    document.querySelectorAll("[data-del-aliment]").forEach(function(b){
+      b.addEventListener("click",function(){
+        alimentsCustom.splice(parseInt(this.dataset.delAliment),1);
+        saveAll();renderNutriTab("aliments");
+      });
+    });
+  }
+}
+
+function openMealModal(id){
+  var r=REPAS_DB.find(function(x){return x.id===id;});
+  if(!r)return;
+  document.getElementById("mo-meal-title").textContent=r.nom;
+  var h="";
+  h+='<div style="display:flex;gap:8px;margin-bottom:12px;">';
+  r.tags.forEach(function(t){h+='<span class="tag tg" style="font-size:10px;">'+t+'</span>';});
+  h+='</div>';
+  h+='<div style="background:var(--bg);border-radius:8px;padding:10px;margin-bottom:10px;display:flex;justify-content:space-around;text-align:center;">';
+  h+='<div><div style="font-size:20px;font-weight:800;color:var(--g);">'+r.kcal+'</div><div style="font-size:9px;color:var(--mu);">kcal</div></div>';
+  h+='<div><div style="font-size:20px;font-weight:800;color:var(--b);">'+r.p+'g</div><div style="font-size:9px;color:var(--mu);">prot</div></div>';
+  h+='<div><div style="font-size:20px;font-weight:800;color:var(--o);">'+r.g+'g</div><div style="font-size:9px;color:var(--mu);">gluc</div></div>';
+  h+='<div><div style="font-size:20px;font-weight:800;color:var(--r);">'+r.l+'g</div><div style="font-size:9px;color:var(--mu);">lip</div></div>';
+  h+='<div><div style="font-size:20px;font-weight:800;color:var(--p);">'+r.temps+'</div><div style="font-size:9px;color:var(--mu);">min</div></div>';
+  h+='</div>';
+  h+='<div class="ct">Ingredients</div>';
+  h+='<div style="background:var(--bg);border-radius:8px;padding:10px;margin-bottom:10px;">';
+  r.ingredients.forEach(function(ing){h+='<div style="padding:4px 0;font-size:13px;color:#c9d1d9;">&#8226; '+ing+'</div>';});
+  h+='</div>';
+  h+='<div class="ct">Preparation ('+r.temps+' min)</div>';
+  h+='<div class="alert-b" style="margin-bottom:10px;font-size:13px;line-height:1.7;">'+r.recette+'</div>';
+  h+='<div class="ct">Pourquoi ce repas</div>';
+  h+='<div class="alert-g" style="margin-bottom:12px;font-size:12px;">'+r.pourquoi+'</div>';
+  h+='<button class="btn btn-p" id="btn-add-meal">Ajouter au journal du jour</button>';
+  document.getElementById("mo-meal-content").innerHTML=h;
+  openMo("mo-meal");
+  document.getElementById("btn-add-meal").addEventListener("click",function(){
+    addRepasAuto(r.nom,r.kcal,r.p,r.g,r.l);
+    closeMo("mo-meal");showToast(r.nom+" ajoute au journal !");
+  });
+}
+
+function addRepas(){
+  var nom=(document.getElementById("n-nom").value||"").trim();
+  var k=parseInt(document.getElementById("n-k").value)||0;
+  var p2=parseInt(document.getElementById("n-p").value)||0;
+  var g2=parseInt(document.getElementById("n-g").value)||0;
+  var l2=parseInt(document.getElementById("n-l").value)||0;
+  if(!nom||!k){showToast("Nom et calories requis","var(--r)");return;}
+  addRepasAuto(nom,k,p2,g2,l2);
+  showToast("Ajoute !");renderNutriTab("repas");
+}
+function addRepasAuto(nom,k,p2,g2,l2){
+  var today=new Date().toISOString().split("T")[0];
+  var idx=calLog.findIndex(function(c){return c.date===today;});
+  if(idx===-1){calLog.push({date:today,kcal:0,proteines:0,glucides:0,lipides:0,repas:[]});idx=calLog.length-1;}
+  calLog[idx].kcal+=k;calLog[idx].proteines+=p2;calLog[idx].glucides+=g2;calLog[idx].lipides+=l2;
+  (calLog[idx].repas=calLog[idx].repas||[]).push({nom:nom,kcal:k,prot:p2,gluc:g2,lip:l2});
+  saveAll();
+}
+function delRepas(i){
+  var today=new Date().toISOString().split("T")[0];
+  var idx=calLog.findIndex(function(c){return c.date===today;});if(idx===-1)return;
+  var r=calLog[idx].repas[i];
+  calLog[idx].kcal-=r.kcal;calLog[idx].proteines-=r.prot;calLog[idx].glucides-=r.gluc;calLog[idx].lipides-=r.lip;
+  calLog[idx].repas.splice(i,1);saveAll();renderNutriTab("repas");
+}
+function addAlimentCustom(){
+  var nom=(document.getElementById("ca-nom").value||"").trim();
+  var k=parseInt(document.getElementById("ca-k").value)||0;
+  var p2=parseInt(document.getElementById("ca-p").value)||0;
+  var g2=parseInt(document.getElementById("ca-g").value)||0;
+  var l2=parseInt(document.getElementById("ca-l").value)||0;
+  if(!nom||!k){showToast("Nom et calories requis","var(--r)");return;}
+  alimentsCustom.push({nom:nom,kcal:k,p:p2,g:g2,l:l2,categorie:"Personnalise"});
+  saveAll();showToast(nom+" ajoute !");renderNutriTab("aliments");
+}
+
+// ── STATS ──────────────────────────────────────────────────────────────
+function renderStats(){
+  var h="";
+  h+='<div class="card"><div class="ct">Evolution du poids</div>'+poidsChart()+'</div>';
+  var nbParType={muscu:0,cardio:0,renfo:0,repos:0};
+  seancesLog.forEach(function(s){if(nbParType[s.type]!==undefined)nbParType[s.type]++;});
+  h+='<div class="card"><div class="ct">Seances effectuees</div>';
+  h+='<div class="kpi4">';
+  [{l:"Muscu",k:"muscu",c:"var(--g)"},{l:"Cardio",k:"cardio",c:"var(--r)"},{l:"Total",k:"total",c:"var(--b)"},{l:"Jours",k:"jours",c:"var(--p)"}].forEach(function(t){
+    h+='<div class="kb"><div class="kv" style="color:'+t.c+';font-size:18px;">'+(t.k==="total"?seancesLog.length:t.k==="jours"?joursEcoules():nbParType[t.k])+'</div><div class="kl">'+t.l+'</div></div>';
+  });
+  h+='</div></div>';
+  h+='<div class="card"><div class="ct">Objectifs</div>';
+  h+='<div class="fg2">';
+  h+='<div><label class="lbl">Objectif (mois)</label><input type="number" id="st-mois" class="inp" value="'+(profil.objectifMois||5)+'"></div>';
+  h+='<div><label class="lbl">Poids cible (kg)</label><input type="number" id="st-cib" class="inp" value="'+(profil.poidsCible||78)+'" step="0.1"></div>';
+  h+='</div>';
+  h+='<div class="fg2">';
+  h+='<div><label class="lbl">Poids depart (kg)</label><input type="number" id="st-dep" class="inp" value="'+(profil.poidsDepart||85)+'" step="0.1"></div>';
+  h+='<div><label class="lbl">Date depart</label><input type="date" id="st-date" class="inp" value="'+(profil.dateDepart||new Date().toISOString().split("T")[0])+'"></div>';
+  h+='</div>';
+  h+='<div class="mb10"><label class="lbl">Objectif principal</label>';
+  h+='<select id="st-obj" class="inp"><option value="ventre_plat"'+(profil.objectif==="ventre_plat"?" selected":"")+'>Ventre plat & tonus</option>';
+  h+='<option value="perte_poids"'+(profil.objectif==="perte_poids"?" selected":"")+'>Perte de poids</option></select></div>';
+  h+='<div class="mb10"><label class="lbl">Prenom</label><input type="text" id="st-prenom" class="inp" value="'+(profil.prenom||"")+'"></div>';
+  h+='<button class="btn btn-p" id="btn-save-stats">Enregistrer</button></div>';
+  h+='<div class="card"><div class="ct">Progression charges</div>';
+  var exos=Object.keys(chargesLog);
+  if(exos.length){
+    exos.slice(0,8).forEach(function(n){
+      h+='<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #0e1b2a;">';
+      h+='<div style="font-size:12px;font-weight:600;color:#c9d1d9;">'+n+'</div>';
+      h+='<div style="color:var(--g);font-weight:700;">'+chargesLog[n]+' kg</div></div>';
+    });
+  }else{h+='<div style="color:var(--mu);font-size:12px;text-align:center;padding:16px;">Enregistrez vos charges pendant les seances</div>';}
+  h+='</div>';
+  h+='<div class="card" style="border-color:#ef444422;">';
+  h+='<div class="ct" style="color:var(--r);">Zone danger</div>';
+  h+='<button class="btn btn-r" style="padding:10px;" id="btn-reset">Reinitialiser toutes les donnees</button></div>';
+  document.getElementById("page-stats").innerHTML=h;
+  document.getElementById("btn-save-stats").addEventListener("click",function(){
+    profil.objectifMois=parseInt(document.getElementById("st-mois").value)||5;
+    profil.poidsCible=parseFloat(document.getElementById("st-cib").value)||78;
+    profil.poidsDepart=parseFloat(document.getElementById("st-dep").value)||85;
+    profil.dateDepart=document.getElementById("st-date").value;
+    profil.objectif=document.getElementById("st-obj").value;
+    profil.prenom=document.getElementById("st-prenom").value;
+    saveAll();showToast("Enregistre !");renderDashboard();
+  });
+  document.getElementById("btn-reset").addEventListener("click",function(){
+    if(!confirm("Supprimer toutes les donnees ?"))return;
+    poidsLog=[];chargesLog={};seancesLog=[];calLog=[];alimentsCustom=[];
+    profil=Object.assign({},DEFAULT_PROFIL);saveAll();showToast("Reinitialise");renderDashboard();showPage("dashboard");
+  });
+}
+
+// ── PWA MANIFEST ──────────────────────────────────────────────────────
+var manifestData={name:"FitTrack Pro",short_name:"FitTrack",start_url:"./",display:"standalone",background_color:"#060a10",theme_color:"#00c896",icons:[{src:"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%2300c896'/%3E%3Crect x='60' y='230' width='100' height='52' rx='20' fill='white'/%3E%3Crect x='60' y='190' width='52' height='132' rx='20' fill='white'/%3E%3Crect x='140' y='252' width='232' height='24' rx='12' fill='white'/%3E%3Crect x='352' y='230' width='100' height='52' rx='20' fill='white'/%3E%3Crect x='400' y='190' width='52' height='132' rx='20' fill='white'/%3E%3C/svg%3E",sizes:"512x512",type:"image/svg+xml"}]};
+try{var mblob=new Blob([JSON.stringify(manifestData)],{type:"application/json"});var murl=URL.createObjectURL(mblob);var ml=document.createElement("link");ml.rel="manifest";ml.href=murl;document.head.appendChild(ml);}catch(e){}
+// PWA install
+var deferredPrompt=null;
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();deferredPrompt=e;});
+
+// ── INSTALL PROMPT ──────────────────────────────────────────────────────
+window.addEventListener("load",function(){
+  if(!window.matchMedia("(display-mode: standalone)").matches&&deferredPrompt){
+    showToast("Installez l'app : menu Chrome > Ajouter a l'ecran","var(--b)");
+  }
+});
+
+// ── INIT ──────────────────────────────────────────────────────────────
+// Nav event listeners
+document.querySelectorAll("[data-page]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    showPage(this.dataset.page);
+  });
+});
+loadAll();
+renderDashboard();
+</script>
+</body>
+</html>
